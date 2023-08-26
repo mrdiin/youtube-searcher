@@ -1,14 +1,3 @@
-import 'dart:convert';
-import 'dart:math' as math;
-
-import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:intl/intl.dart';
-import 'package:timeago/timeago.dart' as timeago;
-import 'lat_lng.dart';
-import 'place.dart';
-import 'uploaded_file.dart';
-
 String? returnFormatedTime(int? seconds) {
   // write a function that returns time in the format hh:mm:ss when given the argument of seconds.
   if (seconds == null) return null;
