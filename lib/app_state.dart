@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'backend/api_requests/api_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import 'flutter_flow/flutter_flow_util.dart';
-import 'dart:convert';
 
 class FFAppState extends ChangeNotifier {
   static final FFAppState _instance = FFAppState._internal();
@@ -87,7 +86,7 @@ class FFAppState extends ChangeNotifier {
     _searchRefinements[_index] = updateFn(_searchRefinements[_index]);
   }
 
-  List<String> _history = ['flutterflow', 'that thing'];
+  List<String> _history = ['flutterflow', 'flutter', 'dart'];
   List<String> get history => _history;
   set history(List<String> _value) {
     _history = _value;
