@@ -137,7 +137,7 @@ class _SearchPageWidgetState extends State<SearchPageWidget>
                   },
                   obscureText: false,
                   decoration: InputDecoration(
-                    labelText: 'Search for video...',
+                    labelText: 'Search for videos on YouTube...',
                     labelStyle: FlutterFlowTheme.of(context).bodySmall,
                     enabledBorder: OutlineInputBorder(
                       borderSide: BorderSide(
