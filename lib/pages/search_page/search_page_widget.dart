@@ -64,7 +64,7 @@ class _SearchPageWidgetState extends State<SearchPageWidget>
             },
           ),
           title: Text(
-            'Search videos on YouTube',
+            'Search YouTube',
             style: FlutterFlowTheme.of(context).headlineSmall,
           ),
           actions: [],
