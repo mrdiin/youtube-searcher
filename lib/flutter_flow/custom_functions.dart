@@ -13,7 +13,6 @@ String? returnFormatedTime(int? seconds) {
   } else {
     return '$formattedMinutes:$formattedSeconds';
   }
-  ;
 }
 
 String? returnFormatedViewCount(String? viewCount) {
