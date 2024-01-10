@@ -4,13 +4,17 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'flutter_flow/flutter_flow_util.dart';
 
 class FFAppState extends ChangeNotifier {
-  static final FFAppState _instance = FFAppState._internal();
+  static FFAppState _instance = FFAppState._internal();
 
   factory FFAppState() {
     return _instance;
   }
 
   FFAppState._internal();
+
+  static void reset() {
+    _instance = FFAppState._internal();
+  }
 
   Future initializePersistedState() async {
     prefs = await SharedPreferences.getInstance();
@@ -54,6 +58,10 @@ class FFAppState extends ChangeNotifier {
     _searchResults[_index] = updateFn(_searchResults[_index]);
   }
 
+  void insertAtIndexInSearchResults(int _index, dynamic _value) {
+    _searchResults.insert(_index, _value);
+  }
+
   String _initialSearch = 'flutterflow';
   String get initialSearch => _initialSearch;
   set initialSearch(String _value) {
@@ -86,7 +94,13 @@ class FFAppState extends ChangeNotifier {
     _searchRefinements[_index] = updateFn(_searchRefinements[_index]);
   }
 
+
+  void insertAtIndexInSearchRefinements(int _index, dynamic _value) {
+    _searchRefinements.insert(_index, _value);
+  }
+
   List<String> _history = ['flutterflow', 'flutter', 'dart'];
+
   List<String> get history => _history;
   set history(List<String> _value) {
     _history = _value;
@@ -113,6 +127,11 @@ class FFAppState extends ChangeNotifier {
     String Function(String) updateFn,
   ) {
     _history[_index] = updateFn(_history[_index]);
+    prefs.setStringList('ff_history', _history);
+  }
+
+  void insertAtIndexInHistory(int _index, String _value) {
+    _history.insert(_index, _value);
     prefs.setStringList('ff_history', _history);
   }
 }
