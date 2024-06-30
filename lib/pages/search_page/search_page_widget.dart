@@ -1,20 +1,25 @@
 import '/backend/api_requests/api_calls.dart';
 import '/components/loading_animation_widget.dart';
+import '/flutter_flow/flutter_flow_animations.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
+import 'dart:math';
 import '/flutter_flow/custom_functions.dart' as functions;
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:flutter_animate/flutter_animate.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'search_page_model.dart';
 export 'search_page_model.dart';
 
 class SearchPageWidget extends StatefulWidget {
-  const SearchPageWidget({Key? key}) : super(key: key);
+  const SearchPageWidget({super.key});
 
   @override
-  _SearchPageWidgetState createState() => _SearchPageWidgetState();
+  State<SearchPageWidget> createState() => _SearchPageWidgetState();
 }
 
 class _SearchPageWidgetState extends State<SearchPageWidget>
@@ -28,7 +33,8 @@ class _SearchPageWidgetState extends State<SearchPageWidget>
     super.initState();
     _model = createModel(context, () => SearchPageModel());
 
-    _model.userSearchTextController ??= TextEditingController();
+    _model.userSearchTextTextController ??= TextEditingController();
+    _model.userSearchTextFocusNode ??= FocusNode();
   }
 
   @override
@@ -43,7 +49,9 @@ class _SearchPageWidgetState extends State<SearchPageWidget>
     context.watch<FFAppState>();
 
     return GestureDetector(
-      onTap: () => FocusScope.of(context).requestFocus(_model.unfocusNode),
+      onTap: () => _model.unfocusNode.canRequestFocus
+          ? FocusScope.of(context).requestFocus(_model.unfocusNode)
+          : FocusScope.of(context).unfocus(),
       child: Scaffold(
         key: scaffoldKey,
         backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
@@ -66,7 +74,10 @@ class _SearchPageWidgetState extends State<SearchPageWidget>
           ),
           title: Text(
             'Search YouTube',
-            style: FlutterFlowTheme.of(context).headlineSmall,
+            style: FlutterFlowTheme.of(context).headlineSmall.override(
+                  fontFamily: 'Roboto',
+                  letterSpacing: 0.0,
+                ),
           ),
           actions: [],
           centerTitle: false,
@@ -81,33 +92,34 @@ class _SearchPageWidgetState extends State<SearchPageWidget>
               Padding(
                 padding: EdgeInsetsDirectional.fromSTEB(16.0, 4.0, 16.0, 0.0),
                 child: TextFormField(
-                  controller: _model.userSearchTextController,
+                  controller: _model.userSearchTextTextController,
+                  focusNode: _model.userSearchTextFocusNode,
                   onFieldSubmitted: (_) async {
-                    setState(() {
-                      _model.isLoading = true;
-                    });
+                    _model.isLoading = true;
+                    setState(() {});
                     _model.searchResultsUserSearch =
                         await SearchYouTubeCall.call(
-                      queryParameter: _model.userSearchTextController.text,
+                      queryParameter: _model.userSearchTextTextController.text,
                     );
+
                     if ((_model.searchResultsUserSearch?.succeeded ?? true)) {
+                      FFAppState().searchResults = SearchYouTubeCall.video(
+                        (_model.searchResultsUserSearch?.jsonBody ?? ''),
+                      )!
+                          .toList()
+                          .cast<dynamic>();
+                      FFAppState().searchRefinements = getJsonField(
+                        (_model.searchResultsUserSearch?.jsonBody ?? ''),
+                        r'''$.refinements''',
+                        true,
+                      )!
+                          .toList()
+                          .cast<dynamic>();
+                      FFAppState().addToHistory(
+                          _model.userSearchTextTextController.text);
+                      setState(() {});
                       setState(() {
-                        FFAppState().searchResults = SearchYouTubeCall.video(
-                          (_model.searchResultsUserSearch?.jsonBody ?? ''),
-                        )!
-                            .toList()
-                            .cast<dynamic>();
-                        FFAppState().searchRefinements = getJsonField(
-                          (_model.searchResultsUserSearch?.jsonBody ?? ''),
-                          r'''$.refinements''',
-                        )!
-                            .toList()
-                            .cast<dynamic>();
-                        FFAppState()
-                            .addToHistory(_model.userSearchTextController.text);
-                      });
-                      setState(() {
-                        _model.userSearchTextController?.clear();
+                        _model.userSearchTextTextController?.clear();
                       });
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
@@ -125,17 +137,20 @@ class _SearchPageWidgetState extends State<SearchPageWidget>
                       );
                     }
 
-                    setState(() {
-                      _model.isLoading = false;
-                    });
+                    _model.isLoading = false;
+                    setState(() {});
                     Navigator.pop(context);
 
                     setState(() {});
                   },
                   obscureText: false,
                   decoration: InputDecoration(
+                    isDense: false,
                     labelText: 'Search for videos on YouTube...',
-                    labelStyle: FlutterFlowTheme.of(context).bodySmall,
+                    labelStyle: FlutterFlowTheme.of(context).bodySmall.override(
+                          fontFamily: 'Roboto',
+                          letterSpacing: 0.0,
+                        ),
                     enabledBorder: OutlineInputBorder(
                       borderSide: BorderSide(
                         color: Color(0x00000000),
@@ -172,8 +187,11 @@ class _SearchPageWidgetState extends State<SearchPageWidget>
                       size: 20.0,
                     ),
                   ),
-                  style: FlutterFlowTheme.of(context).bodyMedium,
-                  validator: _model.userSearchTextControllerValidator
+                  style: FlutterFlowTheme.of(context).bodyMedium.override(
+                        fontFamily: 'Roboto',
+                        letterSpacing: 0.0,
+                      ),
+                  validator: _model.userSearchTextTextControllerValidator
                       .asValidator(context),
                 ),
               ),
@@ -194,7 +212,10 @@ class _SearchPageWidgetState extends State<SearchPageWidget>
                           EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 0.0, 0.0),
                       child: Text(
                         'History',
-                        style: FlutterFlowTheme.of(context).bodySmall,
+                        style: FlutterFlowTheme.of(context).bodySmall.override(
+                              fontFamily: 'Roboto',
+                              letterSpacing: 0.0,
+                            ),
                       ),
                     ),
                   ],
@@ -228,13 +249,15 @@ class _SearchPageWidgetState extends State<SearchPageWidget>
                                     blurRadius: 0.0,
                                     color:
                                         FlutterFlowTheme.of(context).lineColor,
-                                    offset: Offset(0.0, 1.0),
+                                    offset: Offset(
+                                      0.0,
+                                      1.0,
+                                    ),
                                   )
                                 ],
                               ),
                               child: Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    8.0, 8.0, 8.0, 8.0),
+                                padding: EdgeInsets.all(8.0),
                                 child: Row(
                                   mainAxisSize: MainAxisSize.max,
                                   children: [
@@ -247,10 +270,9 @@ class _SearchPageWidgetState extends State<SearchPageWidget>
                                         size: 20.0,
                                       ),
                                       onPressed: () async {
-                                        setState(() {
-                                          FFAppState()
-                                              .removeFromHistory(historyItem);
-                                        });
+                                        FFAppState()
+                                            .removeFromHistory(historyItem);
+                                        setState(() {});
                                       },
                                     ),
                                     Expanded(
@@ -268,15 +290,14 @@ class _SearchPageWidgetState extends State<SearchPageWidget>
                                               highlightColor:
                                                   Colors.transparent,
                                               onLongPress: () async {
-                                                setState(() {
-                                                  FFAppState().initialSearch =
-                                                      historyItem;
-                                                });
+                                                FFAppState().initialSearch =
+                                                    historyItem;
+                                                setState(() {});
                                                 ScaffoldMessenger.of(context)
                                                     .showSnackBar(
                                                   SnackBar(
                                                     content: Text(
-                                                      '$historyItem has been added as favourite',
+                                                      '${historyItem} has been added as favourite',
                                                       style: TextStyle(
                                                         color:
                                                             FlutterFlowTheme.of(
@@ -298,7 +319,11 @@ class _SearchPageWidgetState extends State<SearchPageWidget>
                                                 maxLines: 2,
                                                 style:
                                                     FlutterFlowTheme.of(context)
-                                                        .bodyMedium,
+                                                        .bodyMedium
+                                                        .override(
+                                                          fontFamily: 'Roboto',
+                                                          letterSpacing: 0.0,
+                                                        ),
                                               ),
                                             ),
                                           ),
@@ -321,38 +346,36 @@ class _SearchPageWidgetState extends State<SearchPageWidget>
                                         size: 20.0,
                                       ),
                                       onPressed: () async {
-                                        setState(() {
-                                          _model.isLoading = true;
-                                        });
+                                        _model.isLoading = true;
+                                        setState(() {});
                                         _model.searchResults =
                                             await SearchYouTubeCall.call(
                                           queryParameter: historyItem,
                                         );
+
                                         if ((_model.searchResults?.succeeded ??
                                             true)) {
-                                          setState(() {
-                                            FFAppState().searchResults =
-                                                SearchYouTubeCall.video(
-                                              (_model.searchResults?.jsonBody ??
-                                                  ''),
-                                            )!
-                                                    .toList()
-                                                    .cast<dynamic>();
-                                          });
-                                          setState(() {
-                                            FFAppState().searchRefinements =
-                                                getJsonField(
-                                              (_model.searchResults?.jsonBody ??
-                                                  ''),
-                                              r'''$.refinements''',
-                                            )!
-                                                    .toList()
-                                                    .cast<dynamic>();
-                                          });
+                                          FFAppState().searchResults =
+                                              SearchYouTubeCall.video(
+                                            (_model.searchResults?.jsonBody ??
+                                                ''),
+                                          )!
+                                                  .toList()
+                                                  .cast<dynamic>();
+                                          setState(() {});
+                                          FFAppState().searchRefinements =
+                                              getJsonField(
+                                            (_model.searchResults?.jsonBody ??
+                                                ''),
+                                            r'''$.refinements''',
+                                            true,
+                                          )!
+                                                  .toList()
+                                                  .cast<dynamic>();
+                                          setState(() {});
                                         }
-                                        setState(() {
-                                          _model.isLoading = false;
-                                        });
+                                        _model.isLoading = false;
+                                        setState(() {});
                                         Navigator.pop(context);
 
                                         setState(() {});

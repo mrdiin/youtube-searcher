@@ -8,15 +8,16 @@ import '/flutter_flow/custom_functions.dart' as functions;
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'home_page_model.dart';
 export 'home_page_model.dart';
 
 class HomePageWidget extends StatefulWidget {
-  const HomePageWidget({Key? key}) : super(key: key);
+  const HomePageWidget({super.key});
 
   @override
-  _HomePageWidgetState createState() => _HomePageWidgetState();
+  State<HomePageWidget> createState() => _HomePageWidgetState();
 }
 
 class _HomePageWidgetState extends State<HomePageWidget> {
@@ -31,33 +32,32 @@ class _HomePageWidgetState extends State<HomePageWidget> {
 
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
-      if (FFAppState().initialSearch != '') {
-        setState(() {
-          _model.isLoading = true;
-        });
+      if (FFAppState().initialSearch != null &&
+          FFAppState().initialSearch != '') {
+        _model.isLoading = true;
+        setState(() {});
         _model.initialSearchResults = await SearchYouTubeCall.call(
           queryParameter: FFAppState().initialSearch,
         );
+
         if ((_model.initialSearchResults?.succeeded ?? true)) {
-          setState(() {
-            FFAppState().searchResults = SearchYouTubeCall.video(
-              (_model.initialSearchResults?.jsonBody ?? ''),
-            )!
-                .toList()
-                .cast<dynamic>();
-          });
-          setState(() {
-            FFAppState().searchRefinements = getJsonField(
-              (_model.initialSearchResults?.jsonBody ?? ''),
-              r'''$.refinements''',
-            )!
-                .toList()
-                .cast<dynamic>();
-          });
+          FFAppState().searchResults = SearchYouTubeCall.video(
+            (_model.initialSearchResults?.jsonBody ?? ''),
+          )!
+              .toList()
+              .cast<dynamic>();
+          setState(() {});
+          FFAppState().searchRefinements = getJsonField(
+            (_model.initialSearchResults?.jsonBody ?? ''),
+            r'''$.refinements''',
+            true,
+          )!
+              .toList()
+              .cast<dynamic>();
+          setState(() {});
         }
-        setState(() {
-          _model.isLoading = false;
-        });
+        _model.isLoading = false;
+        setState(() {});
       }
     });
   }
@@ -74,7 +74,9 @@ class _HomePageWidgetState extends State<HomePageWidget> {
     context.watch<FFAppState>();
 
     return GestureDetector(
-      onTap: () => FocusScope.of(context).requestFocus(_model.unfocusNode),
+      onTap: () => _model.unfocusNode.canRequestFocus
+          ? FocusScope.of(context).requestFocus(_model.unfocusNode)
+          : FocusScope.of(context).unfocus(),
       child: Scaffold(
         key: scaffoldKey,
         backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
@@ -129,6 +131,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                 Padding(
                   padding: EdgeInsetsDirectional.fromSTEB(20.0, 0.0, 20.0, 0.0),
                   child: SingleChildScrollView(
+                    primary: false,
                     child: Column(
                       mainAxisSize: MainAxisSize.max,
                       children: [
@@ -158,43 +161,41 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                         hoverColor: Colors.transparent,
                                         highlightColor: Colors.transparent,
                                         onTap: () async {
-                                          setState(() {
-                                            _model.isLoading = true;
-                                          });
+                                          _model.isLoading = true;
+                                          setState(() {});
                                           _model.refinementSearchItems =
                                               await SearchYouTubeCall.call(
                                             queryParameter:
                                                 refinementsOptionsItem
                                                     .toString(),
                                           );
+
                                           if ((_model.refinementSearchItems
                                                   ?.succeeded ??
                                               true)) {
-                                            setState(() {
-                                              FFAppState().searchResults =
-                                                  SearchYouTubeCall.video(
-                                                (_model.refinementSearchItems
-                                                        ?.jsonBody ??
-                                                    ''),
-                                              )!
-                                                      .toList()
-                                                      .cast<dynamic>();
-                                            });
-                                            setState(() {
-                                              FFAppState().searchRefinements =
-                                                  getJsonField(
-                                                (_model.refinementSearchItems
-                                                        ?.jsonBody ??
-                                                    ''),
-                                                r'''$.refinements''',
-                                              )!
-                                                      .toList()
-                                                      .cast<dynamic>();
-                                            });
+                                            FFAppState().searchResults =
+                                                SearchYouTubeCall.video(
+                                              (_model.refinementSearchItems
+                                                      ?.jsonBody ??
+                                                  ''),
+                                            )!
+                                                    .toList()
+                                                    .cast<dynamic>();
+                                            setState(() {});
+                                            FFAppState().searchRefinements =
+                                                getJsonField(
+                                              (_model.refinementSearchItems
+                                                      ?.jsonBody ??
+                                                  ''),
+                                              r'''$.refinements''',
+                                              true,
+                                            )!
+                                                    .toList()
+                                                    .cast<dynamic>();
+                                            setState(() {});
                                           }
-                                          setState(() {
-                                            _model.isLoading = false;
-                                          });
+                                          _model.isLoading = false;
+                                          setState(() {});
 
                                           setState(() {});
                                         },
@@ -228,6 +229,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                                         .override(
                                                           fontFamily: 'Roboto',
                                                           fontSize: 12.0,
+                                                          letterSpacing: 0.0,
                                                         ),
                                                   ),
                                                 ),
@@ -252,6 +254,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                   FFAppState().searchResults.toList();
                               return ListView.builder(
                                 padding: EdgeInsets.zero,
+                                primary: false,
                                 shrinkWrap: true,
                                 scrollDirection: Axis.vertical,
                                 itemCount: videoResult.length,
@@ -270,7 +273,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                           children: [
                                             Align(
                                               alignment: AlignmentDirectional(
-                                                  0.00, 0.00),
+                                                  0.0, 0.0),
                                               child: ClipRRect(
                                                 borderRadius:
                                                     BorderRadius.circular(15.0),
@@ -278,7 +281,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                                   getJsonField(
                                                     videoResultItem,
                                                     r'''$.thumbnails[0].url''',
-                                                  ),
+                                                  ).toString(),
                                                   width: double.infinity,
                                                   height: 200.0,
                                                   fit: BoxFit.cover,
@@ -320,6 +323,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                                           color: FlutterFlowTheme
                                                                   .of(context)
                                                               .secondaryText,
+                                                          letterSpacing: 0.0,
                                                         ),
                                                   ),
                                                 ],
@@ -349,7 +353,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                                     getJsonField(
                                                       videoResultItem,
                                                       r'''$.author.avatar[0].url''',
-                                                    ),
+                                                    ).toString(),
                                                     fit: BoxFit.cover,
                                                   ),
                                                 ),
@@ -382,6 +386,8 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                                                       'Roboto',
                                                                   fontSize:
                                                                       20.0,
+                                                                  letterSpacing:
+                                                                      0.0,
                                                                   fontWeight:
                                                                       FontWeight
                                                                           .w500,
@@ -409,7 +415,13 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                                             ).toString(),
                                                             style: FlutterFlowTheme
                                                                     .of(context)
-                                                                .bodyMedium,
+                                                                .bodyMedium
+                                                                .override(
+                                                                  fontFamily:
+                                                                      'Roboto',
+                                                                  letterSpacing:
+                                                                      0.0,
+                                                                ),
                                                           ),
                                                         ),
                                                         Padding(
@@ -444,7 +456,13 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                                             ).toString())} views',
                                                             style: FlutterFlowTheme
                                                                     .of(context)
-                                                                .bodyMedium,
+                                                                .bodyMedium
+                                                                .override(
+                                                                  fontFamily:
+                                                                      'Roboto',
+                                                                  letterSpacing:
+                                                                      0.0,
+                                                                ),
                                                           ),
                                                         ),
                                                         Padding(
@@ -479,7 +497,13 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                                             ).toString(),
                                                             style: FlutterFlowTheme
                                                                     .of(context)
-                                                                .bodyMedium,
+                                                                .bodyMedium
+                                                                .override(
+                                                                  fontFamily:
+                                                                      'Roboto',
+                                                                  letterSpacing:
+                                                                      0.0,
+                                                                ),
                                                           ),
                                                         ),
                                                       ],
