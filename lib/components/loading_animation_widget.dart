@@ -1,18 +1,17 @@
-import 'package:flutter/material.dart';
-import 'package:lottie/lottie.dart';
-import 'package:provider/provider.dart';
-
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:lottie/lottie.dart';
+import 'package:provider/provider.dart';
 import 'loading_animation_model.dart';
-
 export 'loading_animation_model.dart';
 
 class LoadingAnimationWidget extends StatefulWidget {
-  const LoadingAnimationWidget({Key? key}) : super(key: key);
+  const LoadingAnimationWidget({super.key});
 
   @override
-  _LoadingAnimationWidgetState createState() => _LoadingAnimationWidgetState();
+  State<LoadingAnimationWidget> createState() => _LoadingAnimationWidgetState();
 }
 
 class _LoadingAnimationWidgetState extends State<LoadingAnimationWidget> {
@@ -39,8 +38,6 @@ class _LoadingAnimationWidgetState extends State<LoadingAnimationWidget> {
 
   @override
   Widget build(BuildContext context) {
-    context.watch<FFAppState>();
-
     return Padding(
       padding: EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 0.0, 0.0),
       child: Container(

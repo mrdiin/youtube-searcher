@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'backend/api_requests/api_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import 'flutter_flow/flutter_flow_util.dart';
+import 'dart:convert';
 
 class FFAppState extends ChangeNotifier {
   static FFAppState _instance = FFAppState._internal();
@@ -35,115 +36,103 @@ class FFAppState extends ChangeNotifier {
 
   List<dynamic> _searchResults = [];
   List<dynamic> get searchResults => _searchResults;
-  set searchResults(List<dynamic> _value) {
-    _searchResults = _value;
+  set searchResults(List<dynamic> value) {
+    _searchResults = value;
   }
 
-  void addToSearchResults(dynamic _value) {
-    _searchResults.add(_value);
+  void addToSearchResults(dynamic value) {
+    searchResults.add(value);
   }
 
-  void removeFromSearchResults(dynamic _value) {
-    _searchResults.remove(_value);
+  void removeFromSearchResults(dynamic value) {
+    searchResults.remove(value);
   }
 
-  void removeAtIndexFromSearchResults(int _index) {
-    _searchResults.removeAt(_index);
+  void removeAtIndexFromSearchResults(int index) {
+    searchResults.removeAt(index);
   }
 
   void updateSearchResultsAtIndex(
-    int _index,
+    int index,
     dynamic Function(dynamic) updateFn,
   ) {
-    _searchResults[_index] = updateFn(_searchResults[_index]);
+    searchResults[index] = updateFn(_searchResults[index]);
   }
 
-  void insertAtIndexInSearchResults(int _index, dynamic _value) {
-    _searchResults.insert(_index, _value);
+  void insertAtIndexInSearchResults(int index, dynamic value) {
+    searchResults.insert(index, value);
   }
 
   String _initialSearch = 'flutterflow';
   String get initialSearch => _initialSearch;
-  set initialSearch(String _value) {
-    _initialSearch = _value;
-    prefs.setString('ff_initialSearch', _value);
+  set initialSearch(String value) {
+    _initialSearch = value;
+    prefs.setString('ff_initialSearch', value);
   }
 
   List<dynamic> _searchRefinements = [];
   List<dynamic> get searchRefinements => _searchRefinements;
-  set searchRefinements(List<dynamic> _value) {
-    _searchRefinements = _value;
+  set searchRefinements(List<dynamic> value) {
+    _searchRefinements = value;
   }
 
-  void addToSearchRefinements(dynamic _value) {
-    _searchRefinements.add(_value);
+  void addToSearchRefinements(dynamic value) {
+    searchRefinements.add(value);
   }
 
-  void removeFromSearchRefinements(dynamic _value) {
-    _searchRefinements.remove(_value);
+  void removeFromSearchRefinements(dynamic value) {
+    searchRefinements.remove(value);
   }
 
-  void removeAtIndexFromSearchRefinements(int _index) {
-    _searchRefinements.removeAt(_index);
+  void removeAtIndexFromSearchRefinements(int index) {
+    searchRefinements.removeAt(index);
   }
 
   void updateSearchRefinementsAtIndex(
-    int _index,
+    int index,
     dynamic Function(dynamic) updateFn,
   ) {
-    _searchRefinements[_index] = updateFn(_searchRefinements[_index]);
+    searchRefinements[index] = updateFn(_searchRefinements[index]);
   }
 
-
-  void insertAtIndexInSearchRefinements(int _index, dynamic _value) {
-    _searchRefinements.insert(_index, _value);
+  void insertAtIndexInSearchRefinements(int index, dynamic value) {
+    searchRefinements.insert(index, value);
   }
 
-  List<String> _history = ['flutterflow', 'flutter', 'dart'];
-
+  List<String> _history = ['flutterflow', 'that thing'];
   List<String> get history => _history;
-  set history(List<String> _value) {
-    _history = _value;
-    prefs.setStringList('ff_history', _value);
+  set history(List<String> value) {
+    _history = value;
+    prefs.setStringList('ff_history', value);
   }
 
-  void addToHistory(String _value) {
-    _history.add(_value);
+  void addToHistory(String value) {
+    history.add(value);
     prefs.setStringList('ff_history', _history);
   }
 
-  void removeFromHistory(String _value) {
-    _history.remove(_value);
+  void removeFromHistory(String value) {
+    history.remove(value);
     prefs.setStringList('ff_history', _history);
   }
 
-  void removeAtIndexFromHistory(int _index) {
-    _history.removeAt(_index);
+  void removeAtIndexFromHistory(int index) {
+    history.removeAt(index);
     prefs.setStringList('ff_history', _history);
   }
 
   void updateHistoryAtIndex(
-    int _index,
+    int index,
     String Function(String) updateFn,
   ) {
-    _history[_index] = updateFn(_history[_index]);
+    history[index] = updateFn(_history[index]);
     prefs.setStringList('ff_history', _history);
   }
 
-  void insertAtIndexInHistory(int _index, String _value) {
-    _history.insert(_index, _value);
+  void insertAtIndexInHistory(int index, String value) {
+    history.insert(index, value);
     prefs.setStringList('ff_history', _history);
   }
-}
-
-LatLng? _latLngFromString(String? val) {
-  if (val == null) {
-    return null;
-  }
-  final split = val.split(',');
-  final lat = double.parse(split.first);
-  final lng = double.parse(split.last);
-  return LatLng(lat, lng);
 }
 
 void _safeInit(Function() initializeField) {
