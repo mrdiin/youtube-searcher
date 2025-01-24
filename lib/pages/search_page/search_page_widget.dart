@@ -6,6 +6,7 @@ import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'dart:math';
+import 'dart:ui';
 import '/flutter_flow/custom_functions.dart' as functions;
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -35,6 +36,8 @@ class _SearchPageWidgetState extends State<SearchPageWidget>
 
     _model.userSearchTextTextController ??= TextEditingController();
     _model.userSearchTextFocusNode ??= FocusNode();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override
@@ -49,9 +52,10 @@ class _SearchPageWidgetState extends State<SearchPageWidget>
     context.watch<FFAppState>();
 
     return GestureDetector(
-      onTap: () => _model.unfocusNode.canRequestFocus
-          ? FocusScope.of(context).requestFocus(_model.unfocusNode)
-          : FocusScope.of(context).unfocus(),
+      onTap: () {
+        FocusScope.of(context).unfocus();
+        FocusManager.instance.primaryFocus?.unfocus();
+      },
       child: Scaffold(
         key: scaffoldKey,
         backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
@@ -96,7 +100,7 @@ class _SearchPageWidgetState extends State<SearchPageWidget>
                   focusNode: _model.userSearchTextFocusNode,
                   onFieldSubmitted: (_) async {
                     _model.isLoading = true;
-                    setState(() {});
+                    safeSetState(() {});
                     _model.searchResultsUserSearch =
                         await SearchYouTubeCall.call(
                       queryParameter: _model.userSearchTextTextController.text,
@@ -117,8 +121,8 @@ class _SearchPageWidgetState extends State<SearchPageWidget>
                           .cast<dynamic>();
                       FFAppState().addToHistory(
                           _model.userSearchTextTextController.text);
-                      setState(() {});
-                      setState(() {
+                      safeSetState(() {});
+                      safeSetState(() {
                         _model.userSearchTextTextController?.clear();
                       });
                     } else {
@@ -138,10 +142,10 @@ class _SearchPageWidgetState extends State<SearchPageWidget>
                     }
 
                     _model.isLoading = false;
-                    setState(() {});
+                    safeSetState(() {});
                     Navigator.pop(context);
 
-                    setState(() {});
+                    safeSetState(() {});
                   },
                   obscureText: false,
                   decoration: InputDecoration(
@@ -198,7 +202,7 @@ class _SearchPageWidgetState extends State<SearchPageWidget>
               if (_model.isLoading)
                 wrapWithModel(
                   model: _model.loadingAnimationModel,
-                  updateCallback: () => setState(() {}),
+                  updateCallback: () => safeSetState(() {}),
                   child: LoadingAnimationWidget(),
                 ),
               Padding(
@@ -230,6 +234,7 @@ class _SearchPageWidgetState extends State<SearchPageWidget>
                               .returnReversedList(FFAppState().history.toList())
                               ?.toList() ??
                           [];
+
                       return ListView.builder(
                         padding: EdgeInsets.zero,
                         scrollDirection: Axis.vertical,
@@ -272,7 +277,7 @@ class _SearchPageWidgetState extends State<SearchPageWidget>
                                       onPressed: () async {
                                         FFAppState()
                                             .removeFromHistory(historyItem);
-                                        setState(() {});
+                                        safeSetState(() {});
                                       },
                                     ),
                                     Expanded(
@@ -292,7 +297,7 @@ class _SearchPageWidgetState extends State<SearchPageWidget>
                                               onLongPress: () async {
                                                 FFAppState().initialSearch =
                                                     historyItem;
-                                                setState(() {});
+                                                safeSetState(() {});
                                                 ScaffoldMessenger.of(context)
                                                     .showSnackBar(
                                                   SnackBar(
@@ -347,7 +352,7 @@ class _SearchPageWidgetState extends State<SearchPageWidget>
                                       ),
                                       onPressed: () async {
                                         _model.isLoading = true;
-                                        setState(() {});
+                                        safeSetState(() {});
                                         _model.searchResults =
                                             await SearchYouTubeCall.call(
                                           queryParameter: historyItem,
@@ -362,7 +367,7 @@ class _SearchPageWidgetState extends State<SearchPageWidget>
                                           )!
                                                   .toList()
                                                   .cast<dynamic>();
-                                          setState(() {});
+                                          safeSetState(() {});
                                           FFAppState().searchRefinements =
                                               getJsonField(
                                             (_model.searchResults?.jsonBody ??
@@ -372,13 +377,13 @@ class _SearchPageWidgetState extends State<SearchPageWidget>
                                           )!
                                                   .toList()
                                                   .cast<dynamic>();
-                                          setState(() {});
+                                          safeSetState(() {});
                                         }
                                         _model.isLoading = false;
-                                        setState(() {});
+                                        safeSetState(() {});
                                         Navigator.pop(context);
 
-                                        setState(() {});
+                                        safeSetState(() {});
                                       },
                                     ),
                                   ],

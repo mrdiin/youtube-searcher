@@ -4,6 +4,7 @@ import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
+import 'dart:ui';
 import '/flutter_flow/custom_functions.dart' as functions;
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -35,7 +36,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
       if (FFAppState().initialSearch != null &&
           FFAppState().initialSearch != '') {
         _model.isLoading = true;
-        setState(() {});
+        safeSetState(() {});
         _model.initialSearchResults = await SearchYouTubeCall.call(
           queryParameter: FFAppState().initialSearch,
         );
@@ -46,7 +47,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
           )!
               .toList()
               .cast<dynamic>();
-          setState(() {});
+          safeSetState(() {});
           FFAppState().searchRefinements = getJsonField(
             (_model.initialSearchResults?.jsonBody ?? ''),
             r'''$.refinements''',
@@ -54,12 +55,14 @@ class _HomePageWidgetState extends State<HomePageWidget> {
           )!
               .toList()
               .cast<dynamic>();
-          setState(() {});
+          safeSetState(() {});
         }
         _model.isLoading = false;
-        setState(() {});
+        safeSetState(() {});
       }
     });
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override
@@ -74,9 +77,10 @@ class _HomePageWidgetState extends State<HomePageWidget> {
     context.watch<FFAppState>();
 
     return GestureDetector(
-      onTap: () => _model.unfocusNode.canRequestFocus
-          ? FocusScope.of(context).requestFocus(_model.unfocusNode)
-          : FocusScope.of(context).unfocus(),
+      onTap: () {
+        FocusScope.of(context).unfocus();
+        FocusManager.instance.primaryFocus?.unfocus();
+      },
       child: Scaffold(
         key: scaffoldKey,
         backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
@@ -91,7 +95,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
               Theme.of(context).brightness == Brightness.dark
                   ? 'assets/images/youtube_logo_dark.png'
                   : 'assets/images/youtube_logo.png',
-              width: 125.0,
+              width: 130.0,
               height: 35.0,
               fit: BoxFit.fitWidth,
             ),
@@ -142,6 +146,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                             builder: (context) {
                               final refinementsOptions =
                                   FFAppState().searchRefinements.toList();
+
                               return SingleChildScrollView(
                                 scrollDirection: Axis.horizontal,
                                 child: Row(
@@ -162,7 +167,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                         highlightColor: Colors.transparent,
                                         onTap: () async {
                                           _model.isLoading = true;
-                                          setState(() {});
+                                          safeSetState(() {});
                                           _model.refinementSearchItems =
                                               await SearchYouTubeCall.call(
                                             queryParameter:
@@ -181,7 +186,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                             )!
                                                     .toList()
                                                     .cast<dynamic>();
-                                            setState(() {});
+                                            safeSetState(() {});
                                             FFAppState().searchRefinements =
                                                 getJsonField(
                                               (_model.refinementSearchItems
@@ -192,12 +197,12 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                             )!
                                                     .toList()
                                                     .cast<dynamic>();
-                                            setState(() {});
+                                            safeSetState(() {});
                                           }
                                           _model.isLoading = false;
-                                          setState(() {});
+                                          safeSetState(() {});
 
-                                          setState(() {});
+                                          safeSetState(() {});
                                         },
                                         child: Container(
                                           width: 100.0,
@@ -252,6 +257,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                             builder: (context) {
                               final videoResult =
                                   FFAppState().searchResults.toList();
+
                               return ListView.builder(
                                 padding: EdgeInsets.zero,
                                 primary: false,
@@ -539,7 +545,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                         Expanded(
                           child: wrapWithModel(
                             model: _model.loadingAnimationModel,
-                            updateCallback: () => setState(() {}),
+                            updateCallback: () => safeSetState(() {}),
                             child: LoadingAnimationWidget(),
                           ),
                         ),
