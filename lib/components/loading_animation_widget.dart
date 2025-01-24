@@ -27,6 +27,8 @@ class _LoadingAnimationWidgetState extends State<LoadingAnimationWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => LoadingAnimationModel());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override
@@ -47,7 +49,7 @@ class _LoadingAnimationWidgetState extends State<LoadingAnimationWidget> {
           color: FlutterFlowTheme.of(context).secondaryBackground,
         ),
         child: Lottie.asset(
-          'assets/lottie_animations/loading_indicator.json',
+          'assets/jsons/loading_indicator.json',
           width: MediaQuery.sizeOf(context).width * 1.0,
           height: 30.0,
           fit: BoxFit.fitWidth,
