@@ -27,11 +27,11 @@ class SearchPageModel extends FlutterFlowModel<SearchPageWidget> {
   TextEditingController? userSearchTextTextController;
   String? Function(BuildContext, String?)?
       userSearchTextTextControllerValidator;
-  // Stores action output result for [Backend Call - API (Search YouTube)] action in userSearchText widget.
+  // Stores action output result for [Backend Call - API (Search YouTube API)] action in userSearchText widget.
   ApiCallResponse? searchResultsUserSearch;
   // Model for LoadingAnimation component.
   late LoadingAnimationModel loadingAnimationModel;
-  // Stores action output result for [Backend Call - API (Search YouTube)] action in IconButton widget.
+  // Stores action output result for [Backend Call - API (Search YouTube API)] action in IconButton widget.
   ApiCallResponse? searchResults;
 
   @override

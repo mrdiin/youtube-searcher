@@ -9,12 +9,12 @@ export 'api_manager.dart' show ApiCallResponse;
 
 const _kPrivateApiFunctionName = 'ffPrivateApiCall';
 
-class SearchYouTubeCall {
+class SearchYouTubeAPICall {
   static Future<ApiCallResponse> call({
     String? queryParameter = '',
   }) async {
     return ApiManager.instance.makeApiCall(
-      callName: 'Search YouTube',
+      callName: 'Search YouTube API',
       apiUrl: 'https://youtube-data8.p.rapidapi.com/search/',
       callType: ApiCallType.GET,
       headers: {

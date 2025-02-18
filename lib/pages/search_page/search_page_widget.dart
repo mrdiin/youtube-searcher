@@ -102,12 +102,12 @@ class _SearchPageWidgetState extends State<SearchPageWidget>
                     _model.isLoading = true;
                     safeSetState(() {});
                     _model.searchResultsUserSearch =
-                        await SearchYouTubeCall.call(
+                        await SearchYouTubeAPICall.call(
                       queryParameter: _model.userSearchTextTextController.text,
                     );
 
                     if ((_model.searchResultsUserSearch?.succeeded ?? true)) {
-                      FFAppState().searchResults = SearchYouTubeCall.video(
+                      FFAppState().searchResults = SearchYouTubeAPICall.video(
                         (_model.searchResultsUserSearch?.jsonBody ?? ''),
                       )!
                           .toList()
@@ -354,14 +354,14 @@ class _SearchPageWidgetState extends State<SearchPageWidget>
                                         _model.isLoading = true;
                                         safeSetState(() {});
                                         _model.searchResults =
-                                            await SearchYouTubeCall.call(
+                                            await SearchYouTubeAPICall.call(
                                           queryParameter: historyItem,
                                         );
 
                                         if ((_model.searchResults?.succeeded ??
                                             true)) {
                                           FFAppState().searchResults =
-                                              SearchYouTubeCall.video(
+                                              SearchYouTubeAPICall.video(
                                             (_model.searchResults?.jsonBody ??
                                                 ''),
                                           )!
