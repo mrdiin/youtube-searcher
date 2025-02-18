@@ -40,21 +40,16 @@ class _LoadingAnimationWidgetState extends State<LoadingAnimationWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 0.0, 0.0),
-      child: Container(
-        width: double.infinity,
+    return Container(
+      width: double.infinity,
+      height: MediaQuery.sizeOf(context).height * 1.0,
+      decoration: BoxDecoration(),
+      child: Lottie.asset(
+        'assets/jsons/loading_indicator.json',
+        width: MediaQuery.sizeOf(context).width * 1.0,
         height: 30.0,
-        decoration: BoxDecoration(
-          color: FlutterFlowTheme.of(context).secondaryBackground,
-        ),
-        child: Lottie.asset(
-          'assets/jsons/loading_indicator.json',
-          width: MediaQuery.sizeOf(context).width * 1.0,
-          height: 30.0,
-          fit: BoxFit.fitWidth,
-          animate: true,
-        ),
+        fit: BoxFit.fitWidth,
+        animate: true,
       ),
     );
   }

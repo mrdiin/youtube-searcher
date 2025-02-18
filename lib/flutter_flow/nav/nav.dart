@@ -42,10 +42,13 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
       errorBuilder: (context, state) => appStateNotifier.showSplashImage
           ? Builder(
               builder: (context) => Container(
-                color: FlutterFlowTheme.of(context).primaryBackground,
-                child: Image.asset(
-                  'assets/images/youtube_logo_dark.png',
-                  fit: BoxFit.contain,
+                color: Color(0xFF220618),
+                child: Center(
+                  child: Image.asset(
+                    'assets/images/youtube_logo_dark.png',
+                    width: MediaQuery.sizeOf(context).width * 0.8,
+                    fit: BoxFit.contain,
+                  ),
                 ),
               ),
             )
@@ -57,10 +60,13 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           builder: (context, _) => appStateNotifier.showSplashImage
               ? Builder(
                   builder: (context) => Container(
-                    color: FlutterFlowTheme.of(context).primaryBackground,
-                    child: Image.asset(
-                      'assets/images/youtube_logo_dark.png',
-                      fit: BoxFit.contain,
+                    color: Color(0xFF220618),
+                    child: Center(
+                      child: Image.asset(
+                        'assets/images/youtube_logo_dark.png',
+                        width: MediaQuery.sizeOf(context).width * 0.8,
+                        fit: BoxFit.contain,
+                      ),
                     ),
                   ),
                 )

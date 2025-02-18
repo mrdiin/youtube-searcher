@@ -20,9 +20,9 @@ class HomePageModel extends FlutterFlowModel<HomePageWidget> {
 
   ///  State fields for stateful widgets in this page.
 
-  // Stores action output result for [Backend Call - API (Search YouTube)] action in HomePage widget.
+  // Stores action output result for [Backend Call - API (Search YouTube API)] action in HomePage widget.
   ApiCallResponse? initialSearchResults;
-  // Stores action output result for [Backend Call - API (Search YouTube)] action in Container widget.
+  // Stores action output result for [Backend Call - API (Search YouTube API)] action in Container widget.
   ApiCallResponse? refinementSearchItems;
   // Model for LoadingAnimation component.
   late LoadingAnimationModel loadingAnimationModel;
